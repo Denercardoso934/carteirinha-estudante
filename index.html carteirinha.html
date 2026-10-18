@@ -1,0 +1,347 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>XPTO | Carteirinha de Estudante</title>
+
+    <!-- Estilos da página -->
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px 16px;
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #163b70;
+            margin-bottom: 30px;
+        }
+
+        .conteudo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            align-items: start;
+        }
+
+        .painel {
+            background: white;
+            padding: 24px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px #0000000d;
+        }
+
+        label {
+            display: block;
+            margin: 16px 0 7px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: 2px solid #3b82f6;
+            border-color: transparent;
+        }
+
+        .cartao {
+            background: white;
+            border: 2px solid #163b70;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px #00000012;
+        }
+
+        .cabecalho {
+            background: #163b70;
+            color: white;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .cabecalho h2 {
+            margin: 0 0 5px;
+            font-size: 20px;
+        }
+
+        .cabecalho p {
+            margin: 0;
+            font-size: 12px;
+        }
+
+        .corpo-cartao {
+            display: flex;
+            gap: 15px;
+            padding: 20px;
+            align-items: center;
+        }
+
+        .foto {
+            width: 100px;
+            height: 125px;
+            flex-shrink: 0;
+            border: 1px dashed #94a3b8;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            overflow: hidden;
+        }
+
+        .foto img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .dados {
+            min-width: 0;
+        }
+
+        .campo-cartao {
+            margin-bottom: 15px;
+            overflow-wrap: anywhere;
+        }
+
+        .campo-cartao small {
+            display: block;
+            color: #64748b;
+            font-size: 11px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .campo-cartao strong {
+            font-size: 14px;
+        }
+
+        .rodape {
+            padding: 12px;
+            text-align: center;
+            background: #f1f5f9;
+            color: #64748b;
+            font-size: 11px;
+        }
+
+        .aviso {
+            font-size: 12px;
+            color: #64748b;
+            line-height: 1.5;
+            margin-top: 18px;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        @media (max-width: 650px) {
+            .conteudo {
+                grid-template-columns: 1fr;
+            }
+
+            body {
+                padding: 20px 12px;
+            }
+        }
+    </style>
+
+    <!-- Biblioteca Vue.js -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+
+    <div id="app" class="container" v-cloak>
+
+        <h1>XPTO — Carteirinha do Estudante</h1>
+
+        <div class="conteudo">
+
+            <!-- FORMULÁRIO -->
+            <section class="painel">
+
+                <h2>Preencha os dados</h2>
+
+                <label for="nome">Nome completo</label>
+                <input
+                    id="nome"
+                    type="text"
+                    v-model.trim="nome"
+                    placeholder="Digite seu nome"
+                >
+
+                <label for="matricula">Matrícula</label>
+                <input
+                    id="matricula"
+                    type="text"
+                    v-model.trim="matricula"
+                    placeholder="Digite sua matrícula"
+                >
+
+                <label for="curso">Curso</label>
+                <input
+                    id="curso"
+                    type="text"
+                    v-model.trim="curso"
+                    placeholder="Digite seu curso"
+                >
+
+                <label for="instituicao">Instituição</label>
+                <input
+                    id="instituicao"
+                    type="text"
+                    v-model.trim="instituicao"
+                    placeholder="Nome da instituição"
+                >
+
+                <label for="foto">Foto do estudante</label>
+                <input
+                    id="foto"
+                    type="file"
+                    accept="image/*"
+                    @change="carregarFoto"
+                >
+
+                <p class="aviso">
+                    Esta é uma demonstração para estudo.
+                    Não representa uma carteirinha oficial nem comprova
+                    vínculo estudantil.
+                </p>
+
+            </section>
+
+            <!-- PRÉVIA DA CARTEIRINHA -->
+            <section class="painel">
+
+                <h2>Prévia do cartão</h2>
+
+                <div class="cartao">
+
+                    <header class="cabecalho">
+                        <h2>ESTUDANTE</h2>
+                        <p>CARTEIRINHA DEMONSTRATIVA</p>
+                    </header>
+
+                    <div class="corpo-cartao">
+
+                        <div class="foto">
+                            <img
+                                v-if="foto"
+                                :src="foto"
+                                alt="Foto selecionada"
+                            >
+
+                            <span v-else>Foto</span>
+                        </div>
+
+                        <div class="dados">
+
+                            <div class="campo-cartao">
+                                <small>Nome</small>
+                                <strong>
+                                    {{ nome || "Seu nome aparecerá aqui" }}
+                                </strong>
+                            </div>
+
+                            <div class="campo-cartao">
+                                <small>Matrícula</small>
+                                <strong>
+                                    {{ matricula || "Não informada" }}
+                                </strong>
+                            </div>
+
+                            <div class="campo-cartao">
+                                <small>Curso</small>
+                                <strong>
+                                    {{ curso || "Não informado" }}
+                                </strong>
+                            </div>
+
+                            <div class="campo-cartao">
+                                <small>Instituição</small>
+                                <strong>
+                                    {{ instituicao || "Não informada" }}
+                                </strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <footer class="rodape">
+                        MODELO DE ESTUDO • SEM VALIDADE OFICIAL
+                    </footer>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </div>
+
+    <!-- LÓGICA DA APLICAÇÃO -->
+    <script>
+        const app = Vue.createApp({
+
+            data() {
+                return {
+                    nome: "",
+                    matricula: "",
+                    curso: "",
+                    instituicao: "",
+                    foto: ""
+                };
+            },
+
+            methods: {
+                carregarFoto(event) {
+                    const arquivo = event.target.files[0];
+
+                    if (!arquivo) {
+                        this.foto = "";
+                        return;
+                    }
+
+                    if (!arquivo.type.startsWith("image/")) {
+                        alert("Selecione um arquivo de imagem.");
+                        event.target.value = "";
+                        this.foto = "";
+                        return;
+                    }
+
+                    this.foto = URL.createObjectURL(arquivo);
+                }
+            }
+
+        });
+
+        app.mount("#app");
+    </script>
+
+</body>
+</html>
